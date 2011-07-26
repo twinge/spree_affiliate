@@ -1,9 +1,12 @@
 module AffiliateCredits
   private
 
-  def create_affiliate_credits(sender, recipient, event)
+  def create_affiliate_credits(sender, recipient, event, order = nil)
     #check if sender should receive credit on affiliate register
     if sender_credit_amount = Spree::Config["sender_credit_on_#{event}_amount".to_sym] and sender_credit_amount.to_f > 0
+      if order
+        sender_credit_amount = order.item_total * (sender_credit_amount.to_f / 100.0)
+      end
       credit = StoreCredit.create(:amount => sender_credit_amount,
                          :remaining_amount => sender_credit_amount,
                          :reason => "Affiliate: #{event}", :user => sender)
