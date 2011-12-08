@@ -27,9 +27,10 @@ UserRegistrationsController.class_eval do
 
       #create credit (if required)
       create_affiliate_credits(sender, @user, "register")
+
+      #destroy the cookie, as the affiliate record has been created.
+      cookies[:ref_id] = nil
     end
 
-    #destroy the cookie, as the affiliate record has been created.
-    cookies[:ref_id] = nil
   end
 end
